@@ -4,30 +4,26 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// Dummy User Details (Replace with actual user data)
 const userDetails = {
-  user_id: "john_doe_17091999",
-  email: "john@xyz.com",
-  roll_number: "ABCD123",
+  user_id: "priyanshu_chauhan_17092000",
+  email: "priyanshuchauhan1729@example.com",
+  roll_number: "23BCS80038",
 };
 
-// Route: GET /bfhl
 app.get("/bfhl", (req, res) => {
   res.status(200).json({ operation_code: 1 });
 });
 
-// Route: POST /bfhl
 app.post("/bfhl", (req, res) => {
   try {
     const { data } = req.body;
 
-    if (!Array.isArray(data)) {
+    if (!data || !Array.isArray(data)) {
       return res.status(400).json({ is_success: false, message: "Invalid input format" });
     }
 
@@ -42,7 +38,9 @@ app.post("/bfhl", (req, res) => {
       }
     });
 
-    const highest_alphabet = alphabets.length ? [alphabets.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })).pop()] : [];
+    const highest_alphabet = alphabets.length
+      ? [alphabets.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })).pop()]
+      : [];
 
     res.status(200).json({
       is_success: true,
@@ -51,13 +49,12 @@ app.post("/bfhl", (req, res) => {
       alphabets,
       highest_alphabet,
     });
-
   } catch (error) {
-    res.status(500).json({ is_success: false, message: "Server error" });
+    console.error("Server Error:", error);
+    res.status(500).json({ is_success: false, message: "Internal Server Error" });
   }
 });
 
-// Start the server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });
